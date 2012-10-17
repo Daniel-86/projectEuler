@@ -1,16 +1,27 @@
-def esPalindrome(numero){
-    def cadena = numero.toString()
-    return cadena.equals(cadena.reverse())
+/*
+*    Daniel Jimenez Ortega
+*    Encontrar el numero palidromo (capicua) formado por el producto de 2 numeros de 3 digitos
+*/
+
+import groovy.time.*
+
+String.metaClass.esPalindromo = {
+    delegate == delegate.reverse()
 }
 
+Date inicio = new Date()
 def maxPal = 0
-def n1P, n2P
-for(n1 = 0; n1 < 999; n1++)
-    for(n2 = 0; n2 < 999; n2++)
-        if(esPalindrome(n1 * n2) && n1*n2> maxPal){
-            maxPal = n1*n2
-            n1P = n1
-            n2P = n2
-        }
+def n1, n2
+(1..999).each { i->
+            (1..999).each { j->
+                        if( (i*j).toString().esPalindromo() && i*j > maxPal){
+                            maxPal = i*j
+                            n1 = i
+                            n2 = j
+                         }
+             }
+}
 
-println "El palindrome maximo formado por numeros de 3 digitos es:$maxPal, los digitos son:($n1P, $n2P)"
+
+println "Palindromo $maxPal, los digitos son:($n1, $n2)"
+println "Ejecutado en ${TimeCategory.minus(new Date(), inicio)}"

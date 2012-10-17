@@ -1,3 +1,10 @@
+/*
+*    Daniel Jimenez Ortega
+*    Suma de todos los elementos pares de la serie Fibonacci y que sean menores a 4 millonees.
+*/
+
+import groovy.time.*
+
 def fibonacci(numero){
     assert numero > 0
     if(numero == 1)
@@ -8,20 +15,17 @@ def fibonacci(numero){
         return fibonacci(numero -2) + fibonacci(numero - 1)
 }
 
-
+Date inicio = new Date()
 def resolver(){
-    def suma = 0
-    def numero = 2
-    for(; ; numero ++){
-        def temp = fibonacci(numero)
-        if(temp < 4000000){
-            if(temp % 2 == 0)
-                suma += temp
-        }
-        else
-            break
+    Integer suma = 0
+    Integer fibN = 0
+    
+    for(N = 2; fibN < 4000000 ; N++){
+        fibN = fibonacci(N)
+        if (!(fibN % 2)) suma += fibN
     }
     return suma
 }
 
 println "resultado: ${resolver()}"
+println "Ejecutado en ${TimeCategory.minus(new Date(), inicio)}"

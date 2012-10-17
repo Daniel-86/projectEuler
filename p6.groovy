@@ -1,14 +1,12 @@
-def sumaCuadrados(listaNumeros){
-    return listaNumeros.sum{ it ** 2 }
-}
+/*
+*    Daniel Jimenez Ortega
+*    Para el intervalo 1..100, encontrar la diferencia del cuadrado de la suma y la suma de los cuadrados
+*/
 
-def cuadradoSuma(listaNumeros){
-    return listaNumeros.sum() ** 2
-}
+import groovy.time.*
 
-def diferenciaC(listaNumeros){
-    return cuadradoSuma(listaNumeros) - sumaCuadrados(listaNumeros)
-}
-
+Date inicio = new Date()
 def rango = 1..100
-println "La diferencia es: ${diferenciaC(rango)}"
+Integer diferencia = rango.sum() ** 2 - rango.sum{it*it}
+println "solucion $diferencia"
+println "Ejecutado en ${TimeCategory.minus(new Date(), inicio)}"

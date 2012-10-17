@@ -1,7 +1,15 @@
+/*
+*    Daniel Jimenez Ortega
+*    Cual es el 10001 primo?
+*/
+
+import groovy.time.*
+
 class Primo{
     private def esPrimo = true
     private def primosAnt = []
     private def numero
+    static primos = []
     
     public Primo(numero){
         this.numero = numero
@@ -87,25 +95,77 @@ class Primo{
 }
 
 
-def getPrimosL(listaNumeros){
-    def listaPrimos = []
-    listaNumeros.each{
-        def esPrimo = true
-        for(i=2; i<it; i++)
-            if(it%i == 0){
+List primos = [2, 3]
+def getPrimos = { Integer numero->
+    if(numero < 2)
+        return []
+    List primosAnt = primos.grep { it <= numero }
+    Integer inicio = primosAnt.max() ?: 2
+    (inicio % 2) ?: inicio++
+    boolean actPrimos = inicio >= primos.max()
+    Integer incremento = 2
+//    ( inicio == 2)? (incremento = 1): (incremento = 2)
+    for(i=inicio; i<=numero; i+=incremento){
+        boolean esPrimo = true
+        for (primo in primosAnt){
+            if (i % primo == 0){
                 esPrimo = false
                 break
             }
-        if(esPrimo== true)
-            listaPrimos += it
-     }
-     return listaPrimos
+        }
+        if (esPrimo)
+            primosAnt += i
+        if (actPrimos && esPrimo){
+            primos += i
+        }
+    }
+    return primosAnt
 }
 
+def esPrimo = { Integer num->
+    List primosAnte = getPrimos(num)
+    primosAnte -= num
+   // println "$num ${primosAnte}"
+    boolean resultado = true
+    for (primo in primosAnte)
+        if ( num % primo == 0 ){
+            resultado = false
+            break
+        }
+    return resultado
+//    return num in primosAnte
+}
 
+def getNextPrimo = { Integer num->
+    while (!esPrimo(++num));
+    return num
+}
+
+def getPrimoN = { Integer N->
+    Integer primo = 1
+//    N.times { primo = getNextPrimo (primo) }
+    (1..N).each{
+        primo = getNextPrimo (primo)
+        if ( !(primo in primos) ){//println "agrega primo"
+            primos += primo}
+    }
+    return primo
+}
+
+Date inicio = new Date()
 def numero = 10001
+//def numero = 300
 /*def prime = new Primo(numero)
 println "probando  $prime"
 println "sus primos anteriores son: ${prime.getPrimosAnteriores()}"*/
 //println "el siguiente primo de $numero es: ${Primo.getNextPrimo(numero)}"
-println "el primo $numero es ${Primo.getNPrimo(numero)}"
+
+//println "${getPrimoN(numero)}"
+//println "Ejecutado en ${TimeCategory.minus(new Date(), inicio)}\n"
+
+inicio = new Date()
+//println "el primo $numero es ${Primo.getNPrimo(numero)}"
+println "primos ${Primo.primosAnteriores(15)}"
+println "Ejecutado2 en ${TimeCategory.minus(new Date(), inicio)}\n"
+//println primos
+//println "${5.times{println it}}"
