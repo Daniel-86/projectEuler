@@ -6,10 +6,10 @@
 import groovy.time.*
 
 class Primo{
-    private def esPrimo = true
-    private def primosAnt = []
-    private def numero
-    static primos = []
+    private boolean esPrimo = true
+    private List primosAnt = []
+    private Integer numero
+    static List primos = []
     
     public Primo(numero){
         this.numero = numero
@@ -29,9 +29,9 @@ class Primo{
         if(numero == 1)
             return [1]
 //        def primosAnt = listaPrimos.grep{ it < numero}
-        def primosAnt = listaPrimos
-        for(def i=primosAnt.max() + 1; i<numero; i++){
-            def esPrimoA = true
+        List primosAnt = listaPrimos
+        for(Integer i=primosAnt.max() + 1; i<numero; i++){
+            boolean esPrimoA = true
             for(it in primosAnt){
                 if(it != 1 &&  i%it == 0){
                     esPrimoA = false
@@ -47,7 +47,7 @@ class Primo{
     static boolean esPrimo(numero, primosAnt = [1]){
         if(numero == 1)
             return true
-        def esPrimo = true
+        boolean esPrimo = true
         if(primosAnt.size() == 1 && numero > 2)
             primosAnt = primosAnteriores(numero)
         for(it in primosAnt){
@@ -63,11 +63,11 @@ class Primo{
         return "$numero es primo: $esPrimo"
     }
     
-    def getPrimosAnteriores(){
+    List getPrimosAnteriores(){
         return primosAnt
     }
     
-    static def getNextPrimo(numero, primosAnt = [1], esPrim = true){//println "recibe $numero, $primosAnt, $esPrim"
+    static Integer getNextPrimo(numero, primosAnt = [1], esPrim = true){//println "recibe $numero, $primosAnt, $esPrim"
         if(primosAnt.size()==1 && numero>2){//println "calcula anteriores en NextPrimo"
             primosAnt = primosAnteriores(numero)
             esPrim = esPrimo(numero, primosAnt)
@@ -75,16 +75,16 @@ class Primo{
         if(esPrim)
             primosAnt += numero
         //println "anteriores en NextPrimo: $primosAnt"
-        def i = numero + 1
+        Integer i = numero + 1
         for(; !esPrimo(i,primosAnt); i++);
         return i
     }
     
-    static def getNPrimo(indice){
-        def primoN = 1
-        def primosAnt = [1]
-        def esPrim
-        for(def contador = 1; contador <= indice; contador++){
+    static Integer getNPrimo(indice){
+        Integer primoN = 1
+        List primosAnt = [2]
+        boolean esPrim
+        for(def contador = 1; contador < indice; contador++){
 //            esPrim = esPrimo(primoN, primosAnt)
             primoN = getNextPrimo(primoN, primosAnt,true)
             primosAnt = primosAnteriores(primoN, primosAnt)
@@ -93,6 +93,14 @@ class Primo{
         return primoN
     }
 }
+
+
+
+
+
+
+
+
 
 
 List primos = [2, 3]
@@ -105,7 +113,7 @@ def getPrimos = { Integer numero->
     boolean actPrimos = inicio >= primos.max()
     Integer incremento = 2
 //    ( inicio == 2)? (incremento = 1): (incremento = 2)
-    for(i=inicio; i<=numero; i+=incremento){
+    for(Integer i=inicio; i<=numero; i+=incremento){
         boolean esPrimo = true
         for (primo in primosAnt){
             if (i % primo == 0){
@@ -152,8 +160,15 @@ def getPrimoN = { Integer N->
     return primo
 }
 
+
+
+
+
+
+
+
 Date inicio = new Date()
-def numero = 10001
+Integer numero = 10001
 //def numero = 300
 /*def prime = new Primo(numero)
 println "probando  $prime"
@@ -164,8 +179,8 @@ println "sus primos anteriores son: ${prime.getPrimosAnteriores()}"*/
 //println "Ejecutado en ${TimeCategory.minus(new Date(), inicio)}\n"
 
 inicio = new Date()
-//println "el primo $numero es ${Primo.getNPrimo(numero)}"
-println "primos ${Primo.primosAnteriores(15)}"
+println "el primo $numero es ${Primo.getNPrimo(numero)}"
+//println "primos ${Primo.primosAnteriores(numero)}"
 println "Ejecutado2 en ${TimeCategory.minus(new Date(), inicio)}\n"
 //println primos
 //println "${5.times{println it}}"

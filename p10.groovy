@@ -1,3 +1,10 @@
+/*
+*    Daniel Jimenez Ortega
+*    Calcula la suma de los primos menores a 2 millones
+*/
+
+import groovy.time.*
+
 class Primo{
     private def esPrimo = true
     private def primosAnt = []
@@ -105,6 +112,7 @@ def getPrimosL(listaNumeros){
 }
 
 
+Date inicio = new Date()
 def numero = 2000000
 /*def prime = new Primo(numero)
 println "probando  $prime"
@@ -112,3 +120,4 @@ println "sus primos anteriores son: ${prime.getPrimosAnteriores()}"*/
 //println "el siguiente primo de $numero es: ${Primo.getNextPrimo(numero)}"
 //(println "La suma de los primos anteriores a $numero es ${Primo.primosAnteriores(numero).sum() - 1}"
 println "La suma de los primos anteriores a $numero es ${Primo.primosAnteriores(numero)}"
+println "Ejectuado en ${TimeCategory.minus(new Date(), inicio)}"

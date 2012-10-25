@@ -1,3 +1,12 @@
+/*
+*    Daniel Jimenez Ortega
+*    Dado:
+*		a² + b² = c², a + b + c = 1000
+*    encontrar abc
+*/
+
+import groovy.time.*
+
 def encuentraNumeros(suma = 1000){
     def a, b, c
     boolean salir = false
@@ -17,4 +26,6 @@ def encuentraNumeros(suma = 1000){
     println "a:$a  b:$b  c:$c\tproducto:${a*b*c}"
 }
 
+Date inicio = new Date()
 encuentraNumeros()
+println "Ejectuado en ${TimeCategory.minus(new Date(), inicio)}"
