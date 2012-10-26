@@ -1,10 +1,17 @@
 /*
+*    Daniel Jimenez Ortega
+*    Cual es el primer numero triangulo en tener mas de 500 divisores
+*/
+
+
+/*		NOTAS
      todo numero perfecto es igual a la suma de sus divisores (excluyendo el numero mismo)
      todo numero perfecto es un numero triangular (no se conoce un numero perfecto impar, todos son pares)
-     ************el primer numero en tener mas de N divisores siempre es un numero perfecto
-     el primer numero en tener mas de N divisores siempre es un numero par
+     el primer numero en tener mas de N divisores siempre es un numero par (no necesariamente perfecto)
      la secuencia de los numeros triangulares sigue el patron (impar, impar, par, par, impar, impar, par, par, ...)
-     
+*/
+
+/*
      
 def divisorGen(n):
     factors = list(factorGenerator(n))
@@ -28,6 +35,8 @@ n = a^x * b^y * c^z
      
      
 */
+
+import groovy.time.*
 
 BigInteger trianguloNumero(indice){
     return indice * (indice + 1) / 2
@@ -64,67 +73,6 @@ List<BigInteger> primosAnterioresMitad(numero, listaPrimos = [1]){
 
 
 List<BigInteger> primos = [1]
-def numeroDivisores = {numero->println "\t\t CALCULANDO PARA $numero"
-    primos = primosAnterioresMitad(numero, primos)
-    //println "primos anteriores $primos, son ${primos.size()}"
-    List<BigInteger> primosDivisores = primos.grep{ numero % it == 0 }
-    println "primos divisores $primosDivisores"
-    List<BigInteger> divisores = primosDivisores.grep{it!=1} as BigInteger[]
-    List<BigInteger> vecesPrimos = []
-    divisores.each{ vecesPrimos += numero / it }
-    println "divisores iniciales $vecesPrimos, son ${vecesPrimos.size()}"
-    BigInteger maximoPrimo = primosDivisores.max()
-    for (primoD in primosDivisores){
-    //BigInteger primoD = primosDivisores[1]
-        if(primoD == 1) continue
-        println "\n"
-        def contador = 1
-        for(temp in vecesPrimos){ println "\n"
-            BigInteger divisorTemp = temp
-            BigInteger otroDiv = primosDivisores[contador++]
-            println"\tusando el primo $primoD"
-            while (divisorTemp > maximoPrimo){
-                println"\t\t          analizando par\t$divisorTemp\t$otroDiv"
-                if(!(otroDiv in divisores))
-                        divisores += otroDiv
-                if(!(divisorTemp in divisores)){
-                    divisores += divisorTemp
-                }
-    //            println "divisores $divisores"
-                if(divisorTemp % primoD != 0){println "\trompe porque $divisorTemp no es divisible entre $primoD"
-                    break}
-                divisorTemp /= primoD
-                otroDiv = otroDiv * primoD
-//                println"\t\t          analizando par\t$divisorTemp\t$otroDiv"
-
-                
-//                println "divisores $divisores"
-                
-            }
-        }
-    }
-    divisores += 1
-    divisores += numero
-    println "\ndivisores encontrados ${divisores.sort()}"
-
-    return divisores.size()
-}
-
-/*def divisores(numero){
-
-    def primos = primosAnteriores(numero)
-    def primosDivisores = primos.grep{ it != 1 && numero % it == 0 }
-    def divisores = primosDivisores
-    primosDivisores.each{//println "iterando el primo $it"
-                            for(i=it; i<numero; i+=it){//println "\tvalor de la iteracion $i"
-                                if(numero % i == 0 && !divisores.contains(i))
-                                    divisores += i
-                            }
-                        }
-    divisores += 1
-    divisores += numero
-    return divisores
-}*/
 
 List<BigInteger> primosDivisores(numero, listaPrimos){
     List<BigInteger> primosDivisores = listaPrimos.grep {numero % it == 0} as BigInteger[]
@@ -132,28 +80,6 @@ List<BigInteger> primosDivisores(numero, listaPrimos){
     return primosDivisores
 }
 
-
-def divisoresC = {numero ->
-    primos = primosAnterioresMitad(numero, primos)
-    //def primosDivisores = primos.grep{ it != 1 && numero % it == 0 }
-    def primosDivisores = []
-    for (it in primos){
-        if (it > numero/2)
-            break
-        if (it != 1 && numero % it == 0)
-            primosDivisores += it
-    }
-    def divisores = primosDivisores
-    primosDivisores.each{//println "iterando el primo $it"
-                            for(i=it; i<numero; i+=it){//println "\tvalor de la iteracion $i"
-                                if(numero % i == 0 && !divisores.contains(i))
-                                    divisores += i
-                            }
-                        }
-    divisores += 1
-    divisores += numero
-    return divisores
-}
 
 
 def resolver(numDiv, closure){
@@ -197,21 +123,7 @@ listaPrueba += c
 BigInteger d = 1
 println "${listaPrueba.contains(d)}"*/
 
-class Factores {
-    private Map<BigInteger, BigInteger> factores
-    private BigInteger numero
-    public Factores(numero){
-        this.numero = numero
-    }
-}
 
-def formatFactores(factores){
-    String formateado = ""
-    factores.each{ llave, valor->
-                    formateado += "($llave ** $valor)"
-                 }
-    return formateado
-}
 
 def numDivisores = { numero->
     Map<BigInteger, BigInteger> factores = generaFactores(numero)
@@ -226,6 +138,10 @@ def numDivisores = { numero->
    // }
 }
 
+
+Date inicio = new Date()
 def cantDiv = 500
 //println "el numero $dato = ${formatFactores(generaFactores(dato))} y tiene ${numDivisores(dato)} divisores"
 println "el primer numero triangulo en tener mas de $cantDiv divisores es ${resolver(cantDiv,numDivisores)}"
+//println "factores ${generaFactores(76576500)}"
+println "Ejecutado en ${TimeCategory.minus(new Date(), inicio)}"

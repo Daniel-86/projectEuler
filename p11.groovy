@@ -1,105 +1,105 @@
-def matrizDeArchivo(ruta){
-    def archivo = new File(ruta)
+/*
+*    Daniel Jimenez Ortega
+*    Cual es el producto maximo de 4 numeros adyacentes en una matriz?
+*/
+
+import groovy.time.*
+
+
+/*
+*	crea una matriz a partir de una archivo de texto
+*/
+def matrizDeArchivo (ruta) {
+    File archivo = new File(ruta)
     List matriz = []
-    archivo.eachLine{
-        def fila = []
-        def datosFila = it.split(' ')
-        datosFila.each{fila += Integer.parseInt(it)}
-        matriz += [fila]
+    
+    archivo.eachLine {
+        List datosFila = it.split(' ')
+        matriz += [ datosFila.collect{Integer.parseInt(it)} ]
     }        
 }
 
-//println "la matriz es \n${matrizDeArchivo('/home/rbnseven/Escritorio/p11Matriz.txt')}"
 
-def maxProdH(matriz, nAdj = 4){
-    def nFilas = matriz.size()
-    def nCol = matriz[0].size()
-    def max = 0
-    def bloqueMax = []
-    def maxFil, maxCol
-    matriz.each{
-        for(i=0; i<nCol-nAdj; i++){
-            def bloque = it[i..(i+nAdj-1)]
-            def prod = 1
-            bloque.each{num->
-                prod *= num
-            }
-            if(prod>max){
-                max = prod
-                bloqueMax = bloque
-                maxCol = i
-            }
+/*
+*	calcula el producto maximo de nAdj numeros adyacentes,
+*	dentro de la matriz especificada y horizontalmente
+*/
+Integer maxProdH (matriz, nAdj = 4) {
+    Integer nCol = matriz[0].size()
+    Integer max = 0
+    
+    matriz.each { fila->
+        (0..nCol-nAdj).each { i->
+            List bloque = fila[ i..(i + nAdj-1) ]
+            Integer prod = bloque.inject(1) {prod, val-> prod * val}
+            max = Math.max (max, prod)
          }
     }
-//    println "bloque Max $bloqueMax, columna $maxCol"
     return max
 }
 
-def maxProdV(matriz, nAdj=4){
-    return maxProdH(GroovyCollections.transpose(matriz), nAdj)
+
+/*
+*	calcula el producto maximo de nAdj numeros adyacentes,
+*	dentro de la matriz especificada y verticalmente
+*/
+def maxProdV (matriz, nAdj=4) {
+    return maxProdH (GroovyCollections.transpose(matriz), nAdj)
 }
 
-def maxProdDiag(matriz, nAdj=4){
-    def nFilas = matriz.size()
-    def nCol = matriz[0].size()
-    def max = 0
-    def bloqueMax = []
-    def maxFil, maxCol
-    for(fila=0; fila<nFilas - nAdj; fila++){
-        for(col=0; col<nCol - nAdj; col++){
-            def bloque = []
-            4.times{//println "${it+fila}"
-                bloque += matriz[it+fila][it+col]
-            }
-            def prod = 1
-            bloque.each{prod *=it}
-            if(prod>max){
-                max=prod
-                bloqueMax = bloque
-                maxCol = col
-                maxFil = fila
-            }
+
+/*
+*	calcula el producto maximo de nAdj numeros adyacentes,
+*	dentro de la matriz especificada y en diagonal hacia abajo
+*/
+def maxProdDiag (matriz, nAdj=4) {
+    Integer nFilas = matriz.size()
+    Integer nCol = matriz[0].size()
+    Integer max = 0
+    
+    (0..nFilas-nAdj).each { fila->
+    	(0..nCol-nAdj).each { col->
+            List bloque = []
+            4.times { bloque += matriz [it+fila] [it+col] }
+            Integer prod = bloque.inject(1) {prod, val-> prod * val}
+            max = Math.max (max, prod)
         }
     }
-//    println "bloque Max $bloqueMax, columna $maxCol, fila $maxFil"
     return max
 }
 
-def maxProdDiagUp(matriz, nAdj=4){
-    def nFilas = matriz.size()
-    def nCol = matriz[0].size()
-    def max = 0
-    def bloqueMax = []
-    def maxFil, maxCol
-    for(fila=nAdj-1; fila<nFilas; fila++){
-        for(col=0; col<nCol - nAdj; col++){
-            def bloque = []
-            4.times{//println "${it+fila}"
-                bloque += matriz[fila -it][it+col]
-            }
-            def prod = 1
-            bloque.each{prod *=it}
-            if(prod>max){
-                max=prod
-                bloqueMax = bloque
-                maxCol = col
-                maxFil = fila
-            }
+
+/*
+*	calcula el producto maximo de nAdj numeros adyacentes,
+*	dentro de la matriz especificada y en diagonal hacia arriba
+*/
+def maxProdDiagUp (matriz, nAdj=4) {
+    Integer nFilas = matriz.size()
+    Integer nCol = matriz[0].size()
+    Integer max = 0
+    
+    (nAdj-1..<nFilas).each { fila->
+    	(0..nCol-nAdj).each { col->
+            List bloque = []
+            4.times{ bloque += matriz [fila-it] [it+col] }
+            Integer prod = bloque.inject(1) {prod, val-> prod * val}
+            max = Math.max (max, prod)
         }
     }
-//    println "bloque Max $bloqueMax, columna $maxCol, fila $maxFil"
     return max
 }
 
-def matriz = matrizDeArchivo('/home/rbnseven/Escritorio/p11Matriz.txt')
+
+
+
+Date inicio = new Date()
+def matriz = matrizDeArchivo('./p11Matriz.txt')
 def valores = []
 valores += maxProdH(matriz)
 valores += maxProdV(matriz)
 valores += maxProdDiag(matriz)
 valores += maxProdDiagUp(matriz)
-//println "el producto maximo horizontal es ${maxProdH(matriz)}"
-//println "el producto maximo vertical es ${maxProdV(matriz)}"
-//println "el producto maximo vertical es ${maxProdDiag( matriz)}"
-//println "el producto maximo vertical es ${maxProdDiagUp( matriz)}"
 
 println "El producto maximo es ${valores.max()}"
+println "Ejectuado en ${TimeCategory.minus(new Date(), inicio)}"
+

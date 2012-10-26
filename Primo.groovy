@@ -11,6 +11,33 @@ class Primo {
 	
 	
 	
+	static def getCriba (numero) {
+		def criba = new boolean[numero]
+		Arrays.fill(criba, true)
+		criba[0] = false
+		criba[1] = false
+		
+		for ( i in 2..criba.size()**0.5) {
+			if (criba[i]) {
+				Integer j = i + i
+				while (j < criba.size()) {
+					criba[j] = false
+					j += i
+				}
+			}
+		}
+		return criba
+	}
+	
+	
+	static BigInteger sumaPrimos (numero) {
+		def criba = getCriba(numero)
+		BigInteger suma = 0
+		criba.eachWithIndex { elm, indx-> if(elm == true) suma += indx}
+		return suma
+	}
+	
+	
 	static List getPrimos (numero, ...prim) {
 		List primosAnte
 		if (!prim)
@@ -76,7 +103,46 @@ class Primo {
 	}
 	
 	
+	static List getPrimDiv (numero, primosL) {
+		return primosL.grep {numero % it == 0}
+	}
+	
+	
+	static Map getFactores (numero) {
+		List primosAnte = getPrimos( Math.sqrt(numero) )
+		List primosDiv = getPrimDiv(numero, primosAnte)
+		List veces = primosDiv.collect { primo->
+			Integer temp = numero
+			Integer contador = 0
+			while (temp % primo == 0) {
+				temp /= primo
+				contador++
+			}
+			return contador
+		}
+		Map factores = [:]
+		primosDiv.size().times {
+			factores [primosDiv[it]] = veces[it]
+		}
+		return factores
+	}
+	
+	
+	static getNumDiv (numero) {
+		Map factores = getFactores(numero)
+		Integer nDiv = 1
+		factores.each { llave, valor->
+			nDiv *= (valor + 1)
+		}
+		return nDiv
+	}
+	
+	
 
+	
+	
+	
+	
 	
 	
 	
