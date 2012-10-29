@@ -1,14 +1,12 @@
-def factoriales = [1:1]
-def factorial
-factorial = {BigInteger numero->
-    if(numero <= 1)
-        return 1
-    if (factoriales.containsKey(numero))
-        return factoriales[numero]
-    def nuevo = numero * factorial(numero-1)
-    factoriales[numero] = nuevo
-    return nuevo
-}
+/*
+*	Daniel Jimenez Ortega
+*
+*	Encuentra la suma de los digitos del numero 100!
+*/
+
+import groovy.time.*
+import Factorial
+
 
 def sumaDigitos = {numero->
     String cadena = numero.toString()
@@ -17,5 +15,9 @@ def sumaDigitos = {numero->
     return suma
 }
 
+
+Date inicio = new Date()
 Integer numero = 100
-println "La suma de los digitos de $numero! = ${factorial(numero)} es ${sumaDigitos(factorial(numero))}"
+BigInteger factrial = Factorial.get(numero)
+println "La suma de los digitos de $numero! es ${sumaDigitos(factrial)}"
+println "Ejecutado en ${TimeCategory.minus(new Date(), inicio)}"

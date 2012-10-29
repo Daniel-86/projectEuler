@@ -108,8 +108,9 @@ class Primo {
 	}
 	
 	
-	static Map getFactores (numero) {
-		List primosAnte = getPrimos( Math.sqrt(numero) )
+	static Map getFactores (numero, tipo = 0) {
+		List primosAnte = (tipo)? getPrimos(Math.sqrt(numero)): getPrimos( numero/2 as Integer )
+		
 		List primosDiv = getPrimDiv(numero, primosAnte)
 		List veces = primosDiv.collect { primo->
 			Integer temp = numero
@@ -128,13 +129,45 @@ class Primo {
 	}
 	
 	
-	static getNumDiv (numero) {
+	static Integer getNumDiv (numero) {
 		Map factores = getFactores(numero)
 		Integer nDiv = 1
 		factores.each { llave, valor->
 			nDiv *= (valor + 1)
 		}
 		return nDiv
+	}
+	
+	
+	/*
+	*	Para encontrar los divisores primero expresa el numero en factores primos
+	*		135 = 3³ * 5¹
+	*	para cada factor primo identificar todos los valores posibles (exponente)
+	*		para 3³ : 1, 3, 9, 27
+	*		para 5¹ : 1, 5
+	*	los divisores son todos los valores obtenidos las combinaciones (multiplicacion)
+	*	de todos los datos de paso anterior.
+	*/
+	static List getDivs (numero) {
+		Map factores = getFactores(numero)
+		List elementos = []
+		factores.each { factor, exp->
+			List temp = [1]
+			while (exp >= 1)
+				temp += factor ** exp--
+			elementos += [temp]
+		}
+		List divs = elementos.combinations().collect { combinacion->
+			Integer div = 1
+			combinacion.each { div *= it}
+			return div
+		}
+		return divs
+	}
+	
+	
+	static List getDivsProp (numero) {
+		return getDivs(numero) - numero
 	}
 	
 	

@@ -7,13 +7,13 @@ Integer num3 = 157
 Integer num4 = 76576500
 Integer indice = 10001
 
-Integer num = num4
+Integer num = 284
 
 Date inicio
 
-//inicio = new Date()
-//println "primos ${Primo.getPrimos(num)}"
-//println "Ejecutado en ${TimeCategory.minus (new Date(), inicio)}\n"
+inicio = new Date()
+println "primos ${Primo.getPrimos(num)}"
+println "Ejecutado en ${TimeCategory.minus (new Date(), inicio)}\n"
 
 //inicio = new Date()
 //println "primos ${Primo.pA( Math.sqrt(num) )}"
@@ -50,6 +50,14 @@ Date inicio
 inicio = new Date()
 println "$num en factores ${Primo.getFactores(num)}"
 println "tiene ${Primo.getNumDiv(num)} divisores"
+println "Ejecutado en ${TimeCategory.minus (new Date(), inicio)}\n"
+
+inicio = new Date()
+println "$num -> divisores: ${Primo.getDivs(num)}"
+println "Ejecutado en ${TimeCategory.minus (new Date(), inicio)}\n"
+
+inicio = new Date()
+println "$num -> divisores PROPIOS: ${Primo.getDivsProp(num)}"
 println "Ejecutado en ${TimeCategory.minus (new Date(), inicio)}\n"
 
 //println "primos almacenados ${Primo.primos}"

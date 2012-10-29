@@ -1,5 +1,8 @@
 import java.util.Arrays;
+import groovy.time.*
 
+
+Date inicio = new Date()
 final int LO_VAL = 12;
 final int HI_VAL = 28123+1;
 
@@ -37,3 +40,4 @@ for (int i = 0; i < HI_VAL; i++) {
     if (!nums[i]) answer += i;
 }
 println "$answer"
+println "Ejecutado en ${TimeCategory.minus(new Date(), inicio)}"

@@ -1,57 +1,63 @@
-def factoriales = [1:1]
-def factorial
-factorial = {BigInteger numero->
-    if(numero <= 1)
-        return 1
-    if (factoriales.containsKey(numero))
-        return factoriales[numero]
-    def nuevo = numero * factorial(numero-1)
-    factoriales[numero] = nuevo
-    return nuevo
-}
+/*	Daniel Jimenez Ortega
+*	
+*	Dada una cuadricula 20x20, cuantas rutas existen para ir del extremo superior izquierdo
+*	al extremo inferior derecho.
+*
+*	Este es un problema combinatorio; el numero de rutas de una esquina es la suma de las rutas
+*	de los "caminos" adyacentes a esa esquina. Es decir los valores del triangulo de Pascal.
+*
+*		combinacion(n, r) = n! / (n-r!)r!	numero de maneras de elegir r elementos de n
+*/
+
+import groovy.time.*
+import Factorial
 
 
+/*
+*	combinacion(n, k) = n! / ( (n-k!) * k! )
+*/
 def coeficienteBinomial
 coeficienteBinomial = {n, k->
     if (k > n)
         return 0
-    BigInteger facN = factorial(n)
-    BigInteger facK = factorial(k)
-    BigInteger facNK = factorial(n-k)
-    //println "DATOS biniomial $facN / $facK * $facNK"
+    BigInteger facN = Factorial.get(n)
+    BigInteger facK = Factorial.get(k)
+    BigInteger facNK = Factorial.get(n-k)
     return facN/(facK*facNK)
 }
 
 
+def numeroRutasGrid = { filas, columnas->
+    Integer altura = filas * 2
+    Integer objetivo = Math.ceil( filas * 2 / 2.0 ) as Integer
+    return coeficienteBinomial(altura, objetivo)
+}
+
+
+
+Date inicio = new Date()
+def filas = 20
+def columnas = 20
+
+println "La grid $filas x $columnas tiene ${numeroRutasGrid(filas, columnas)} rutas posibles de extremo a extremo"
+println "Ejecutado en ${TimeCategory.minus(new Date(), inicio)}"
+
+
+
+
+/*
+*	El triangulo de Pascal de altura 'n' es la expansion binomial: (x + y)**n,
+*	cada elemento de la expansion es el 'r' coeficiente binomial: combinacion(n, r)
+*/
+
 def expansionBinomial
-expansionBinomial = {exponente->
+expansionBinomial = { exponente->
     List coeficientes = (0..exponente).collect{ coeficienteBinomial(exponente, it)}
     return coeficientes
 }
 
 
-def trianguloPascal = {indice->
-    (0..indice).each{println " "*(indice-it) + "${expansionBinomial(it)}"}
+def trianguloPascal = { indice->
+    (0..indice).each{ println " "*(indice-it) + "${expansionBinomial(it)}" }
 }
 
-
-def numeroRutasGrid = {filas, columnas->
-    def altura = (filas) * 2
-    def objetivo = Math.ceil(filas*2/2.0) as Integer
-    //println "calcular ($altura $objetivo)"
-    return coeficienteBinomial(altura, objetivo)
-}
-
-
-def numero = 2
-def exponente = 7
-def indCoef = 4
-def alturaTriangulo = 15
-//println "el factorial de $numero es ${factorial(numero)}"
-//(1..numero).each{println "el factorial de $it es ${factorial(it)}\n"}
-//println "dado (x + y)*$exponente, ($exponente $indCoef) = ${coeficienteBinomial(exponente, indCoef)}"
-//println "los coeficientes binomiales de (x + y)*$exponente son ${expansionBinomial(exponente)}"
-//trianguloPascal(alturaTriangulo)
-def filas = 20
-def columnas = 20
-println "La grid $filas x $columnas tiene ${numeroRutasGrid(filas, columnas)} rutas posibles de extremo a extremo"

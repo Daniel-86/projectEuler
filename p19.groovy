@@ -1,28 +1,37 @@
+/*
+*	Daniel Jimenez Ortega
+*
+*	Cuantos domingos fueron primero de mes durante el siglo 20 ( 1 Ene 1901 a 31 Dec 2000 )
+*/
+
+import groovy.time.*
+
+
+Map Dia = ['domingo':1, 'lunes':2, 'martes':3, 'miercoles':4, 'jueves':5, 'viernes':6, 'sabado':7]
 def numXenLapso = { diaSemana, fechaIni, fechaFin->
-//    Calendar inicio = Calendar.instance
-    def inicio = new GregorianCalendar(1901, Calendar.JANUARY, 1)
-    def fin = new GregorianCalendar(2000, Calendar.DECEMBER, 31)
-//    def fin = new GregorianCalendar(1901, Calendar.MARCH, 1)
-    def primero = inicio
+    Calendar inicio = fechaIni.toCalendar()
+    Calendar fin = fechaFin.toCalendar()
+    Calendar primero = inicio
     while (primero.get(Calendar.DAY_OF_WEEK) != diaSemana)
         primero = primero.next()
-    def numDias = 0
-    for(def i = primero; i < fin; i = i.next()){//println "${i.time.toString()}   ${i.get(Calendar.DAY_OF_WEEK)}"
-        if(i.get(Calendar.DAY_OF_WEEK) == diaSemana && i.get(Calendar.DAY_OF_MONTH) == 1)
+    Integer numDias = 0
+    for (def i = primero; i < fin; i = i.next()) {
+        if (i.get(Calendar.DAY_OF_WEEK) == diaSemana && i.get(Calendar.DAY_OF_MONTH) == 1)
             numDias++
-//        if (i.get(Calendar.YEAR) == 1904 && i.get(Calendar.MONTH) == Calendar.FEBRUARY)
-  //          println "${i.time}"
     }
-  /*  inicio.set(Calendar.YEAR, 1901)
-    inicio.set(Calendar.MONTH, Calendar.JANUARY)
-    inicio.set(Calendar.DATE, 1)
-    Calendar fin = Calendar.instance
-    fin.set(Calendar.YEAR, 2000)
-    fin.set(Calendar.MONTH, Calendar.DECEMBER)
-    fin.set(Calendar.DATE, 31)*/
-    
-//    println "primer dia de la semana ${inicio.firstDayOfWeek}"
-    println "el numero de $diaSemana son $numDias"
+
+    return numDias
 }
 
-numXenLapso(1,2,3)
+
+Date inicio = new Date()
+String formatoFecha = "dd-MM-yyyy"
+String nombreDia = 'jueves'
+Integer diaSemana = Dia[nombreDia]
+Date fechaIni = Date.parse(formatoFecha, '01-01-1901')
+Date fechaFin = Date.parse(formatoFecha, '31-12-2000')
+Integer nDias = numXenLapso(diaSemana, fechaIni, fechaFin)
+println "En el periodo (${fechaIni.format(formatoFecha)} - ${fechaFin.format(formatoFecha)}) "\
+	+ "hubo $nDias dias $nombreDia que fueron primero de mes"
+println "Ejectuado en ${TimeCategory.minus(new Date(), inicio)}"
+
