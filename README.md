@@ -1,3 +1,3 @@
-Problemas de www.projecteuler.com
+Problemas de www.projecteuler.net
 ============
 Para los ratos de ocio.
